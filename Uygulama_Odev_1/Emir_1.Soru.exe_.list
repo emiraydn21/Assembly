@@ -1,0 +1,165 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+Emir_1.Soru.exe_ -- emu8086 assembler version: 4.07  
+ 
+[ 12.06.2022  --  14:31:37 ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       .data
+[   2]    0000: 08 09 03 1A 16 0E 17 1B               degerler db 8, 9, 3, 26, 22, 14, 23, 27  ;Sayi Dizimiz
+[   3]    0008: 00                                    sonuc db ?
+[   4]        :                                       .code
+[   5]        :                                       
+[   6]        :                                       ;yazdirma
+[   7]    0010:                                       print_al proc
+[   8]        :                                       
+[   9]    0010: 8A D8                                 mov bl,al           ;bl ye al yi aktar
+[  10]    0012: B0 20                                 mov al, " "         ;Kesme isaretini al ye aktar
+[  11]    0014: B4 0E                                 mov ah, 0eh         ;0eh degerini ah ye aktar
+[  12]    0016: CD 10                                 int 10h             ;10h rutinini cagir
+[  13]    0018: 8A C3                                 mov al,bl           ;al ye bl yi aktar
+[  14]        :                                       
+[  15]    001A: 3C 00                                 cmp al, 0           ;0 ve al yi karsilastir
+[  16]    001C: 75 09                                 jne print_al_r      ;esit degilse yazdir
+[  17]    001E: 50                                    push ax             ;yigina ax degerini aktar
+[  18]    001F: B0 30                                 mov al, '0'         ;0 degerini al ye aktar
+[  19]    0021: B4 0E                                 mov ah, 0eh         ;0eh degerini ah e aktar
+[  20]    0023: CD 10                                 int 10h             ;10h rutinini cagir
+[  21]    0025: 58                                    pop ax              ;yigindan ax degerini cek
+[  22]    0026: C3                                    ret
+[  23]        :                                       
+[  24]    0027:                                       print_al_r:
+[  25]    0027: 60                                    pusha
+[  26]    0028: B4 00                                 mov ah, 0           ;0 degerini ah ye aktar
+[  27]    002A: 3D 00 00                              cmp ax, 0           ;0 ve ax operandini karsilastir
+[  28]    002D: 74 11                                 je pn_done
+[  29]    002F: B2 0A                                 mov dl, 10          ;10 degerini dl ye aktar
+[  30]    0031: F6 F2                                 div dl              ;ax degerini dl ye bol
+[  31]    0033: E8 F1 FF                              call print_al_r
+[  32]    0036: 8A C4                                 mov al, ah          ;ah degerini al ye aktar
+[  33]    0038: 04 30                                 add al, 30h         ;30 h adresindeki offset deger ile al yi topla sonucu al ye aktar
+[  34]    003A: B4 0E                                 mov ah, 0eh         ;0eh degerini ah ye aktar
+[  35]    003C: CD 10                                 int 10h             ;10h rutinini cagir
+[  36]    003E: EB 00                                 jmp pn_done
+[  37]    0040:                                       pn_done:
+[  38]    0040: 61                                    popa
+[  39]        :                                       
+[  40]    0041: C3                                    ret
+[  41]        :                                       endp
+[  42]        :                                       
+[  43]    0042:                                       main proc far
+[  44]        :                                       ;en buyuk
+[  45]    0042: B8 00 00                              mov ax,@data            ;data degerleri ax e aktarildi
+[  46]    0045: 8E D8                                 mov ds,ax               ;ax degerleri ds ye aktarildi
+[  47]    0047: BB 00 00                              mov bx, offset degerler ;offset degerler bx e atandi
+[  48]    004A: 2B C0                                 sub ax,ax               ;ax-ax sonucunu ax e aktar
+[  49]    004C: 8A 07                                 mov al, [bx]            ;bx teki offset degerler ax e aktarildi
+[  50]    004E: B9 07 00                              mov cx, 7               ;7 degeri cx adresine aktarildi
+[  51]        :                                       
+[  52]    0051:                                       don:
+[  53]    0051: 43                                    inc bx                  ;bx degerini artir
+[  54]    0052: 3A 07                                 cmp al,[bx]             ;bx ve al operandini karsilastir
+[  55]    0054: 72 05                                 jc degistir             ;elde varsa degistir
+[  56]    0056: 49                                    dec cx                  ;cx degerini azalt
+[  57]    0057: 75 F8                                 jnz don                 ;sifir degilse don etiketine git
+[  58]    0059: 74 05                                 jz exit                 ;sifirsa cik
+[  59]        :                                       
+[  60]    005B:                                       degistir:
+[  61]    005B: 8A 07                                 mov al,[bx]             ;bx teki offset degerler ax e aktarildi
+[  62]    005D: 49                                    dec cx                  ;cx degerini azalt
+[  63]    005E: 75 F1                                 jnz don                 ;sifir degilse don etiketine git
+[  64]        :                                       
+[  65]    0060:                                       exit:
+[  66]    0060: E8 AD FF                              call  print_al          ;yazdirma komutu
+[  67]        :                                       
+[  68]        :                                       ;en kucuk
+[  69]    0063: B8 00 00                              mov ax,@data            ;data degerleri ax e aktarildi
+[  70]    0066: 8E D8                                 mov ds,ax               ;ax degerleri ds ye aktarildi
+[  71]    0068: BB 00 00                              mov bx, offset degerler ;offset degerler bx e atandi
+[  72]    006B: 2B C0                                 sub ax,ax               ;ax-ax sonucunu ax e aktar
+[  73]    006D: 8A 07                                 mov al, [bx]            ;bx teki offset degerler ax e aktarildi
+[  74]    006F: B9 07 00                              mov cx, 7               ;7 degeri cx adresine aktarildi
+[  75]        :                                       
+[  76]    0072:                                       don2:
+[  77]    0072: 43                                    inc bx                  ;bx degerini artir
+[  78]    0073: 3A 07                                 cmp al,[bx]             ;bx ve al operandini karsilastir
+[  79]    0075: 73 05                                 jnc degistir2           ;elde yoksa degistir
+[  80]    0077: 49                                    dec cx                  ;cx degerini azalt
+[  81]    0078: 75 F8                                 jnz don2                ;sifir degilse don2 etiketine git
+[  82]    007A: 74 05                                 jz exit2                ;sifirsa cik
+[  83]        :                                       
+[  84]    007C:                                       degistir2:
+[  85]    007C: 8A 07                                 mov al,[bx]             ;bx teki offset degerler ax e aktarildi
+[  86]    007E: 49                                    dec cx                  ;cx degerini azalt
+[  87]    007F: 75 F1                                 jnz don2                ;sifir degilse don2 etiketine git
+[  88]        :                                       
+[  89]    0081:                                       exit2:
+[  90]    0081: E8 8C FF                              call  print_al          ;yazdirma komutu
+[  91]        :                                       
+[  92]        :                                       ;toplam
+[  93]    0084: B9 08 00                              mov cx, 8               ;dongu, cx e 8 aktar
+[  94]    0087: B0 00                                 mov al, 0               ;al ye 0 aktar
+[  95]    0089: BB 00 00                              mov bx, 0               ;bx e 0 aktar
+[  96]        :                                       
+[  97]    008C:                                       next:
+[  98]    008C: 02 07                                 add al, degerler[bx]    ;bx teki offset degerleri ile al adresindeki degerleri topla sonucu al ye aktar
+[  99]    008E: 43                                    inc bx                  ;bx degerini artir
+[ 100]    008F: E2 FB                                 loop next               ;donguyu kontrol et bitene kadar next etiketine git
+[ 101]        :                                       
+[ 102]    0091: E8 7C FF                              call  print_al          ;yazdirma komutu
+[ 103]        :                                       main endp
+[ 104]        :                                       end main
+[ 105]        :                                       
+[ 106]        :                                       
+ 
+===================================================================================================
+ 
+EXE HEADER - bytes from 0000 to 01FF inclusive.
+
+0000: 4D      -   exe signature (M)
+0001: 5A      -   exe signature (Z)
+0002: 94      -   bytes on last page (l.byte)
+0003: 00      -   bytes on last page (h.byte)
+0004: 02      -   512 byte pages in file (l.byte)
+0005: 00      -   512 byte pages in file (h.byte)
+0006: 02      -   relocations (l.byte)
+0007: 00      -   relocations (h.byte)
+0008: 20      -   paragraphs in header (l.byte)
+0009: 00      -   paragraphs in header (h.byte)
+000A: 00      -   minimum memory (l.byte)
+000B: 00      -   minimum memory (h.byte)
+000C: FF      -   maximum memory (l.byte)
+000D: FF      -   maximum memory (h.byte)
+000E: 00      -   SS - stack segment (l.byte)
+000F: 00      -   SS - stack segment (h.byte)
+0010: 00      -   SP - stack pointer (l.byte)
+0011: 00      -   SP - stack pointer (h.byte)
+0012: E0      -   check sum (l.byte)
+0013: 42      -   check sum (h.byte)
+0014: 32      -   IP - instruction pointer (l.byte)
+0015: 00      -   IP - instruction pointer (h.byte)
+0016: 01      -   CS - code segment (l.byte)
+0017: 00      -   CS - code segment (h.byte)
+0018: 1E      -   relocation table adress (l.byte)
+0019: 00      -   relocation table adress (h.byte)
+001A: 00      -   overlay number (l.byte)
+001B: 00      -   overlay number (h.byte)
+001C: 01      -   signature (l.byte)
+001D: 00      -   signature (h.byte)
+001E: 33      -   relocation table - offset inside segment (l.byte)
+001F: 00      -   relocation table - offset inside segment (h.byte)
+0020: 01      -   relocation table - segment anchor (l.byte)
+0021: 00      -   relocation table - segment anchor (h.byte)
+0022: 54      -   relocation table - offset inside segment (l.byte)
+0023: 00      -   relocation table - offset inside segment (h.byte)
+0024: 01      -   relocation table - segment anchor (l.byte)
+0025: 00      -   relocation table - segment anchor (h.byte)
+0026 to 01FF  -   reserved relocation area  (00) 
+
+
+
+
+===================================================================================================

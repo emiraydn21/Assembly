@@ -1,0 +1,18 @@
+< THE SYMBOL TABLE >  Emir_2.Soru.exe_  --  emu8086 assembler version: 4.07 
+===================================================================================================
+Name                     	Offset    	Size      	Type      	Segment   
+===================================================================================================
+DATA                     	00000     	-5        	SEGMENT   	(ITSELF)  
+DIZI                     	00000     	1         	VAR       	data      
+CODE                     	00001     	-5        	SEGMENT   	(ITSELF)  
+PRINT_AL                 	00000     	-1        	NEAR      	code      
+PRINT_AL_R               	00017     	-1        	LABEL     	code      
+PN_DONE                  	00030     	-1        	LABEL     	code      
+MAIN                     	00032     	-1        	FAR       	code      
+DONGU                    	0003F     	-1        	LABEL     	code      
+GIT                      	0004D     	-1        	LABEL     	code      
+GEC                      	0004F     	-1        	LABEL     	code      
+===================================================================================================
+[ 12.06.2022  --  14:32:44 ] 
+< END >
+ 

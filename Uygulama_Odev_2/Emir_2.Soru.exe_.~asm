@@ -1,0 +1,80 @@
+.data
+dizi db 8, 9, 3, 26, 22, 14, 23, 27  ;Sayi Dizimiz
+.code
+
+;yazdirma
+print_al proc
+
+mov bl,al           ;bl ye al yi aktar
+mov al, " "         ;Kesme isaretini al ye aktar
+mov ah, 0eh         ;0eh degerini ah ye aktar
+int 10h             ;10h rutinini cagir
+mov al,bl           ;al ye bl yi aktar
+
+cmp al, 0           ;0 ve al yi karsilastir
+jne print_al_r      ;esit degilse yazdir
+push ax         ;yigina ax degerini aktar
+mov al, '0'     ;0 degerini al ye aktar
+mov ah, 0eh     ;0eh degerini ah e aktar
+int 10h         ;10h rutinini cagir
+pop ax          ;yigindan ax degerini cek
+
+ret
+
+print_al_r:
+pusha
+mov ah, 0       ;0 degerini ah ye aktar
+cmp ax, 0       ;0 ve ax operandini karsilastir
+je pn_done
+mov dl, 10      ;10 degerini dl ye aktar
+div dl          ;ax degerini dl ye bol
+call print_al_r
+mov al, ah      ;ah degerini al ye aktar
+add al, 30h     ;30 h adresindeki offset deger ile al yi topla sonucu al ye aktar
+mov ah, 0eh     ;0eh degerini ah ye aktar
+int 10h         ;10h rutinini cagir
+jmp pn_done
+pn_done:
+popa
+
+ret
+endp
+
+main proc far
+
+mov ax,@data ;diziyi ax'e aktar
+mov ds,ax    ;ax'i  ds ye aktar
+mov cx,8     ;dongu, cx 8 aktar
+lea si,dizi  ;si ye dizinin offset adresi atildi
+mov bl,0     ;0 degerini bl ye aktar
+
+
+dongu:
+mov ah,0     ;0 degerini ah ye aktar
+mov al,[si]  ;si deki offset degerleri al ye aktar
+
+cmp al,15    ;al ile 15 operandini karsilastir
+jz gec
+
+sub al,15    ;al-15 sonucunu al ye aktar
+
+jnc git      ;git etiketine gecilebilir
+jmp gec      ;gec etiketine git
+
+git:
+inc bl       ;bl degerini artir
+gec:
+inc si       ;si degerini artir ve bir sonraki adrese git
+loop dongu
+
+mov al,bl    ;bl degerini al ye aktar
+
+call  print_al
+
+main endp
+end main
+
+
+
+
+; [SOURCE]: C:\Users\Emir AYDIN\OneDrive\Masaüstü\Ödev_Mikro_Emir_AYDIN\Emir_2.Soru.asm

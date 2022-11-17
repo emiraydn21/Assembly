@@ -1,0 +1,132 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+Emir_2.Soru.exe_ -- emu8086 assembler version: 4.07  
+ 
+[ 12.06.2022  --  14:32:44 ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       .data
+[   2]    0000: 08 09 03 1A 16 0E 17 1B               dizi db 8, 9, 3, 26, 22, 14, 23, 27  ;Sayi Dizimiz
+[   3]        :                                       .code
+[   4]        :                                       
+[   5]        :                                       ;yazdirma
+[   6]    0010:                                       print_al proc
+[   7]        :                                       
+[   8]    0010: 8A D8                                 mov bl,al           ;bl ye al yi aktar
+[   9]    0012: B0 20                                 mov al, " "         ;Kesme isaretini al ye aktar
+[  10]    0014: B4 0E                                 mov ah, 0eh         ;0eh degerini ah ye aktar
+[  11]    0016: CD 10                                 int 10h             ;10h rutinini cagir
+[  12]    0018: 8A C3                                 mov al,bl           ;al ye bl yi aktar
+[  13]        :                                       
+[  14]    001A: 3C 00                                 cmp al, 0           ;0 ve al yi karsilastir
+[  15]    001C: 75 09                                 jne print_al_r      ;esit degilse yazdir
+[  16]    001E: 50                                    push ax         ;yigina ax degerini aktar
+[  17]    001F: B0 30                                 mov al, '0'     ;0 degerini al ye aktar
+[  18]    0021: B4 0E                                 mov ah, 0eh     ;0eh degerini ah e aktar
+[  19]    0023: CD 10                                 int 10h         ;10h rutinini cagir
+[  20]    0025: 58                                    pop ax          ;yigindan ax degerini cek
+[  21]        :                                       
+[  22]    0026: C3                                    ret
+[  23]        :                                       
+[  24]    0027:                                       print_al_r:
+[  25]    0027: 60                                    pusha
+[  26]    0028: B4 00                                 mov ah, 0       ;0 degerini ah ye aktar
+[  27]    002A: 3D 00 00                              cmp ax, 0       ;0 ve ax operandini karsilastir
+[  28]    002D: 74 11                                 je pn_done
+[  29]    002F: B2 0A                                 mov dl, 10      ;10 degerini dl ye aktar
+[  30]    0031: F6 F2                                 div dl          ;ax degerini dl ye bol
+[  31]    0033: E8 F1 FF                              call print_al_r
+[  32]    0036: 8A C4                                 mov al, ah      ;ah degerini al ye aktar
+[  33]    0038: 04 30                                 add al, 30h     ;30 h adresindeki offset deger ile al yi topla sonucu al ye aktar
+[  34]    003A: B4 0E                                 mov ah, 0eh     ;0eh degerini ah ye aktar
+[  35]    003C: CD 10                                 int 10h         ;10h rutinini cagir
+[  36]    003E: EB 00                                 jmp pn_done
+[  37]    0040:                                       pn_done:
+[  38]    0040: 61                                    popa
+[  39]        :                                       
+[  40]    0041: C3                                    ret
+[  41]        :                                       endp
+[  42]        :                                       
+[  43]    0042:                                       main proc far
+[  44]        :                                       
+[  45]    0042: B8 00 00                              mov ax,@data ;diziyi ax'e aktar
+[  46]    0045: 8E D8                                 mov ds,ax    ;ax'i  ds ye aktar
+[  47]    0047: B9 08 00                              mov cx,8     ;dongu, cx 8 aktar
+[  48]    004A: BE 00 00                              lea si,dizi  ;si ye dizinin offset adresi atildi
+[  49]    004D: B3 00                                 mov bl,0     ;0 degerini bl ye aktar
+[  50]        :                                       
+[  51]        :                                       
+[  52]    004F:                                       dongu:
+[  53]    004F: B4 00                                 mov ah,0     ;0 degerini ah ye aktar
+[  54]    0051: 8A 04                                 mov al,[si]  ;si deki offset degerleri al ye aktar
+[  55]        :                                       
+[  56]    0053: 3C 0F                                 cmp al,15    ;al ile 15 operandini karsilastir
+[  57]    0055: 74 08                                 jz gec
+[  58]        :                                       
+[  59]    0057: 2C 0F                                 sub al,15    ;al-15 sonucunu al ye aktar
+[  60]        :                                       
+[  61]    0059: 73 02                                 jnc git      ;git etiketine gecilebilir
+[  62]    005B: EB 02                                 jmp gec      ;gec etiketine git
+[  63]        :                                       
+[  64]    005D:                                       git:
+[  65]    005D: FE C3                                 inc bl       ;bl degerini artir
+[  66]    005F:                                       gec:
+[  67]    005F: 46                                    inc si       ;si degerini artir ve bir sonraki adrese git
+[  68]    0060: E2 ED                                 loop dongu
+[  69]        :                                       
+[  70]    0062: 8A C3                                 mov al,bl    ;bl degerini al ye aktar
+[  71]        :                                       
+[  72]    0064: E8 A9 FF                              call  print_al
+[  73]        :                                       
+[  74]        :                                       main endp
+[  75]        :                                       end main
+[  76]        :                                       
+[  77]        :                                       
+ 
+===================================================================================================
+ 
+EXE HEADER - bytes from 0000 to 01FF inclusive.
+
+0000: 4D      -   exe signature (M)
+0001: 5A      -   exe signature (Z)
+0002: 67      -   bytes on last page (l.byte)
+0003: 00      -   bytes on last page (h.byte)
+0004: 02      -   512 byte pages in file (l.byte)
+0005: 00      -   512 byte pages in file (h.byte)
+0006: 01      -   relocations (l.byte)
+0007: 00      -   relocations (h.byte)
+0008: 20      -   paragraphs in header (l.byte)
+0009: 00      -   paragraphs in header (h.byte)
+000A: 00      -   minimum memory (l.byte)
+000B: 00      -   minimum memory (h.byte)
+000C: FF      -   maximum memory (l.byte)
+000D: FF      -   maximum memory (h.byte)
+000E: 00      -   SS - stack segment (l.byte)
+000F: 00      -   SS - stack segment (h.byte)
+0010: 00      -   SP - stack pointer (l.byte)
+0011: 00      -   SP - stack pointer (h.byte)
+0012: 30      -   check sum (l.byte)
+0013: 94      -   check sum (h.byte)
+0014: 32      -   IP - instruction pointer (l.byte)
+0015: 00      -   IP - instruction pointer (h.byte)
+0016: 01      -   CS - code segment (l.byte)
+0017: 00      -   CS - code segment (h.byte)
+0018: 1E      -   relocation table adress (l.byte)
+0019: 00      -   relocation table adress (h.byte)
+001A: 00      -   overlay number (l.byte)
+001B: 00      -   overlay number (h.byte)
+001C: 01      -   signature (l.byte)
+001D: 00      -   signature (h.byte)
+001E: 33      -   relocation table - offset inside segment (l.byte)
+001F: 00      -   relocation table - offset inside segment (h.byte)
+0020: 01      -   relocation table - segment anchor (l.byte)
+0021: 00      -   relocation table - segment anchor (h.byte)
+0022 to 01FF  -   reserved relocation area  (00) 
+
+
+
+
+===================================================================================================

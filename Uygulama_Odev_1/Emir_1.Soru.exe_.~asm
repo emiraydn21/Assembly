@@ -1,0 +1,109 @@
+.data
+degerler db 8, 9, 3, 26, 22, 14, 23, 27  ;Sayi Dizimiz
+sonuc db ?
+.code
+
+;yazdirma
+print_al proc
+
+mov bl,al           ;bl ye al yi aktar
+mov al, " "         ;Kesme isaretini al ye aktar
+mov ah, 0eh         ;0eh degerini ah ye aktar
+int 10h             ;10h rutinini cagir
+mov al,bl           ;al ye bl yi aktar
+
+cmp al, 0           ;0 ve al yi karsilastir
+jne print_al_r      ;esit degilse yazdir
+push ax             ;yigina ax degerini aktar
+mov al, '0'         ;0 degerini al ye aktar
+mov ah, 0eh         ;0eh degerini ah e aktar
+int 10h             ;10h rutinini cagir
+pop ax              ;yigindan ax degerini cek
+ret
+
+print_al_r:
+pusha
+mov ah, 0           ;0 degerini ah ye aktar
+cmp ax, 0           ;0 ve ax operandini karsilastir
+je pn_done
+mov dl, 10          ;10 degerini dl ye aktar
+div dl              ;ax degerini dl ye bol
+call print_al_r
+mov al, ah          ;ah degerini al ye aktar
+add al, 30h         ;30 h adresindeki offset deger ile al yi topla sonucu al ye aktar
+mov ah, 0eh         ;0eh degerini ah ye aktar
+int 10h             ;10h rutinini cagir
+jmp pn_done
+pn_done:
+popa
+
+ret
+endp
+
+main proc far
+;en buyuk
+mov ax,@data            ;data degerleri ax e aktarildi
+mov ds,ax               ;ax degerleri ds ye aktarildi
+mov bx, offset degerler ;offset degerler bx e atandi
+sub ax,ax               ;ax-ax sonucunu ax e aktar
+mov al, [bx]            ;bx teki offset degerler ax e aktarildi
+mov cx, 7               ;7 degeri cx adresine aktarildi
+
+don:
+inc bx                  ;bx degerini artir
+cmp al,[bx]             ;bx ve al operandini karsilastir
+jc degistir             ;elde varsa degistir
+dec cx                  ;cx degerini azalt
+jnz don                 ;sifir degilse don etiketine git
+jz exit                 ;sifirsa cik
+
+degistir:
+mov al,[bx]             ;bx teki offset degerler ax e aktarildi
+dec cx                  ;cx degerini azalt
+jnz don                 ;sifir degilse don etiketine git
+
+exit:
+call  print_al          ;yazdirma komutu
+
+;en kucuk
+mov ax,@data            ;data degerleri ax e aktarildi
+mov ds,ax               ;ax degerleri ds ye aktarildi
+mov bx, offset degerler ;offset degerler bx e atandi
+sub ax,ax               ;ax-ax sonucunu ax e aktar
+mov al, [bx]            ;bx teki offset degerler ax e aktarildi
+mov cx, 7               ;7 degeri cx adresine aktarildi
+
+don2:
+inc bx                  ;bx degerini artir
+cmp al,[bx]             ;bx ve al operandini karsilastir
+jnc degistir2           ;elde yoksa degistir
+dec cx                  ;cx degerini azalt
+jnz don2                ;sifir degilse don2 etiketine git
+jz exit2                ;sifirsa cik
+
+degistir2:
+mov al,[bx]             ;bx teki offset degerler ax e aktarildi
+dec cx                  ;cx degerini azalt
+jnz don2                ;sifir degilse don2 etiketine git
+
+exit2:
+call  print_al          ;yazdirma komutu
+
+;toplam
+mov cx, 8               ;dongu, cx e 8 aktar
+mov al, 0               ;al ye 0 aktar
+mov bx, 0               ;bx e 0 aktar
+
+next:
+add al, degerler[bx]    ;bx teki offset degerleri ile al adresindeki degerleri topla sonucu al ye aktar
+inc bx                  ;bx degerini artir
+loop next               ;donguyu kontrol et bitene kadar next etiketine git
+
+call  print_al          ;yazdirma komutu
+main endp
+end main
+
+
+
+
+; [SOURCE]: C:\Users\Emir AYDIN\OneDrive\Masaüstü\Ödev_Mikro_Emir_AYDIN\Emir_1.Soru.asm
