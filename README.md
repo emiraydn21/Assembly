@@ -1,2 +1,2 @@
 # Assembly
- Emu8086 da Gerçekleştirmiş Olduğum Projeler
+ Emu8086 Ve Edsim8051 de Gerçekleştirmiş Olduğum Projeler
